@@ -3,6 +3,7 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
 import db
+
 bot = AsyncTeleBot("8726151482:AAEow-CyXYl2ElAKKXd9uWqwNmvIuEv9KhU")
 GROUP_ID = -1003791002710
 
@@ -36,7 +37,7 @@ TEXT = {
         "orders": "📦 Заказы",
         "history": "📦 История",
         "loading": "⏳ Загрузка...",
-        "empty_cart": "🧺 Корзина пуста",
+        "empty_cart": "🛒 Корзина пуста",
         "empty_history": "📦 История пуста",
         "added": "🧺 Добавлено",
         "checkout": "💳 Оформить заказ",
@@ -63,6 +64,7 @@ def product_kb(pid, qty, tr):
     )
 
     kb.add(InlineKeyboardButton(tr["add"], callback_data=f"cart_{pid}"))
+
     return kb
 
 
@@ -84,12 +86,12 @@ async def help_cmd(message):
 {tr['help']}
 
 /start - {tr['start']}
-/help - {tr['help']}
-/language - {tr['language']}
-/products - {tr['products']}
-/cart - {tr['cart']}
-/orders - {tr['orders']}
-/history - {tr['history']}
+ /help - {tr['help']}
+ /language - {tr['language']}
+ /products - {tr['products']}
+ /cart - {tr['cart']}
+ /orders - {tr['orders']}
+ /history - {tr['history']}
 """
     await bot.send_message(message.chat.id, text)
 
@@ -128,15 +130,16 @@ async def send_products(chat_id, uid):
     tr = await t(uid)
 
     for p in products:
-        pid = p["id"]
+
+        pid = p["ID"]
 
         if pid not in qty_cache:
             qty_cache[pid] = 1
 
         await bot.send_photo(
             chat_id,
-            p["avatar"],
-            caption=f"{p['name']}\n💰 {p['price']}",
+            p["AVATAR"],
+            caption=f"{p['NAME']}\n💰 {p['PRICE']}",
             reply_markup=product_kb(pid, qty_cache[pid], tr),
         )
 
